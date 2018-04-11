@@ -1,3 +1,16 @@
 #!/bin/sh;D:/tools/shell/sh.exe
-echo Code sortie = 1
+
+#recup du repertoire d'execution du script
+DIR_CURRENT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR_PRECOMMIT="pre-commit-scripts"
+
+#execution des scripts pre-commit
+echo "Vérification encodage scripts SQL"
+echo sh "$DIR_CURRENT"/"$DIR_PRECOMMIT"/verif-encodage.sh
+sh "$DIR_CURRENT"/"$DIR_PRECOMMIT"/verif-encodage.sh
+RESULT=$?
+echo Code sortie = $RESULT
+test $RESULT -ne 0 && exit # Exit if non-zero exit code
+
+
 exit 0
