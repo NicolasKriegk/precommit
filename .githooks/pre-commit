@@ -2,15 +2,24 @@
 
 #recup du repertoire d'execution du script
 DIR_CURRENT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DIR_PRECOMMIT="pre-commit-scripts"
+DIR_PRECOMMIT_SCRIPTS=$DIR_CURRENT/"pre-commit-scripts"
 
-#execution des scripts pre-commit
+#recuperation repertoire projet Git
+DIR_GIT_PROJECT="$(git rev-parse --show-toplevel)"
+
+#execution des scripts pre-commit-----------------------------------------------------------------
+
+#verif encodage scripts SQL
 echo "Vérification encodage scripts SQL"
-echo sh "$DIR_CURRENT"/"$DIR_PRECOMMIT"/verif-encodage.sh
-sh "$DIR_CURRENT"/"$DIR_PRECOMMIT"/verif-encodage.sh
+echo sh "$DIR_PRECOMMIT_SCRIPTS"/verif-encodage.sh "$DIR_GIT_PROJECT"
+sh "$DIR_PRECOMMIT_SCRIPTS"/verif-encodage.sh "$DIR_GIT_PROJECT"
 RESULT=$?
-echo Code sortie = $RESULT
-test $RESULT -ne 0 && exit # Exit if non-zero exit code
 
+if [ $RESULT -ne 0 ];
+then
+	echo "Fin vérification pre-commit: Etape vérification encodage scripts SQL KO"
+	exit 1 # Exit if non-zero exit code
+fi 
 
+echo "Fin vérification pre-commit: OK"
 exit 0
