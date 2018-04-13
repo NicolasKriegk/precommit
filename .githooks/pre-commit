@@ -2,8 +2,10 @@
 
 #recup du repertoire du projet git
 DIR_PROJET_GIT="$(git rev-parse --show-toplevel)"
-echo Répertoire projet GIT: "$DIR_PROJET_GIT"
-
+echo 
+cat <<EOF
+Répertoire projet GIT: "$DIR_PROJET_GIT"
+EOF
 
 #recup du repertoire d'execution du script
 DIR_CURRENT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -12,17 +14,23 @@ DIR_PRECOMMIT_SCRIPTS="$DIR_CURRENT/pre-commit-scripts"
 #execution des scripts pre-commit-----------------------------------------------------------------
 
 #verif fichiers
-echo Traitement pré-commit ----------------------------------------------
-echo Pré-commit: Appel script de vérification des fichiers du commit: \["$DIR_PRECOMMIT_SCRIPTS"/verif-fichiers.sh\]
+cat <<EOF
+Traitement pré-commit ----------------------------------------------
+Appel script de vérification des fichiers du commit: ["$DIR_PRECOMMIT_SCRIPTS"/verif-fichiers.sh]
+EOF
 bash "$DIR_PRECOMMIT_SCRIPTS"/verif-fichiers.sh
 RESULT=$?
 
 if [ $RESULT -ne 0 ];
 then
-	echo "Fin vérification pre-commit: ERREUR"
-#	exit 1 # Exit if non-zero exit code
+	cat <<EOF
+Fin vérification pre-commit: ERREUR
+Fin Traitement pré-commit ------------------------------------------
+EOF
+	exit 1 # Exit if non-zero exit code
 fi 
 
-echo "Vérification pre-commit: OK"
-echo Fin Traitement pré-commit ------------------------------------------
-exit 0
+cat <<EOF
+Vérification pre-commit: OK
+Fin Traitement pré-commit ------------------------------------------
+EOF
